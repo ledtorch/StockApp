@@ -9,11 +9,11 @@
         <!-- send the msg to methods runs the clear function -->
       </div>
       <div>
-      <p>Now:    {{ calculatedNow }}</p>
+      <p>Now: {{ calculatedNow }}</p>
         <!-- return the value from the function of computed -->
-        <p>Brand:  {{ calculatedBrand }}</p>
+        <p>Brand: {{ calculatedBrand }}</p>
         <p>Future: {{ calculatedFuture }}</p>
-        <!-- <p>API: {{ dataFromYF }}</p> -->
+        <br>
         <p>Symbol: {{ dataFromIEXcloud.symbol }}</p>
         <p>Close Price: {{ dataFromIEXcloud.close }}</p>
         <p>Date: {{ dataFromIEXcloud.latestTime }}</p>
@@ -24,7 +24,6 @@
 </template>
 
 <script>
-// import axios from 'axios'
 
 export default {
   name: 'PriceApp',
@@ -33,9 +32,7 @@ export default {
   data() {
     return {
       price: 0,
-      // dataFromYF: [],
-      // YF = Yahoo Finance API provided by rapidAPI. Stored the data by fetch function
-      dataFromIEXcloud: {}
+      dataFromIEXcloud: []
     }
   },
   methods: {
@@ -57,35 +54,10 @@ export default {
     }
   },
 
-  // Fetch Data from rapidAPI
-  // created() {
-  //   let rapidAPI = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/get-summary?region=US&lang=en"
-  //   fetch(rapidAPI, {
-  //     "method": "GET",
-  //     "headers": {
-  //       "x-rapidapi-host": "apidojo-yahoo-finance-v1.p.rapidapi.com",
-  //       "x-rapidapi-key": "f3c001f042msh6992a42cead98c0p14099fjsn54a08a21b1ee"
-  //     },
-  //   }).then(response => {
-  //     response.json().then(response => {
-  //       this.dataFromYF = response.marketSummaryResponse.result[0].shortName;
-  //       console.log(response.marketSummaryResponse);
-  //       console.log('responsed1');
-  //     })
-  //   }).catch(err => {
-  //     console.log(err);
-  //     console.log('error');
-  //   });
-  // },
-
   created() {
     let IEXcloud = "https://cloud.iexapis.com/stable/stock/AAPL/quote?token=pk_bc3b7c3b94d74055a098edc0230d4fc6"
     fetch(IEXcloud, {
     "method": "GET",
-      // "headers": {
-      //   "x-rapidapi-host": "apidojo-yahoo-finance-v1.p.rapidapi.com",
-      //   "x-rapidapi-key": "f3c001f042msh6992a42cead98c0p14099fjsn54a08a21b1ee"
-      // },
     }).then(response => {
       response.json().then(response => {
         this.dataFromIEXcloud = response;
@@ -97,9 +69,6 @@ export default {
       console.log('error');
     });
   }
-
-
-
 }
 
 </script>
@@ -128,7 +97,6 @@ a {
   color: #42b983;
 }
 p {
-  // align-self: flex-start;
   text-align: left;
 }
 </style>
