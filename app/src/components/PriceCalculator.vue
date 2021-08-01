@@ -1,6 +1,6 @@
 <template>
 	<div class="hello">
-		<h3>Stock App</h3>
+		<h3>Stock Calculator</h3>
 		<div class="inputBox">
 			<div>
 				<input v-model="price" placeholder=" Stock Price" />
@@ -23,8 +23,6 @@
 
 <script>
 export default {
-	name: 'PriceApp',
-	props: {},
 	data() {
 		return {
 			price: 0,

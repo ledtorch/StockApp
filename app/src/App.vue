@@ -1,8 +1,9 @@
 <template>
-	<img alt="Vue logo" src="./assets/logo.png" />
+	<br />
 	<PriceCalculator />
 	<br />
 	<TechList />
+	<br />
 </template>
 
 <script setup>
