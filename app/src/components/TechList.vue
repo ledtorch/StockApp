@@ -2,7 +2,6 @@
 	<div class="listContainer">
 		<h3>Tech List</h3>
 		<div>
-			<button @click="clear">Start</button>
 			<table style="width: 100%">
 				<tr>
 					<th>Symbol</th>
@@ -143,127 +142,6 @@ export default {
 		};
 	},
 
-	methods: {
-		// runs the function once after the getter is triggered
-		clear() {
-			this.AAPLdata.targetPrice = '0';
-			console.log('Methods!');
-		},
-	},
-
-	watch: {
-		check() {
-			return console.log('hihi@@');
-		},
-	},
-
-	computed: {
-		AAPLTargetPrice() {
-			return (this.AAPLdata.targetPrice =
-				this.dataFromAAPL.week52High * this.short.toFixed(2));
-		},
-		checkAAPL() {
-			if (this.AAPLdata.targetPrice < this.dataFromAAPL.low)
-				return (this.AAPLdata.buyAlert = true);
-			console.log('Buy it!');
-			// console.log(this.dataFromAAPL.low);
-		},
-
-		AMZNTargetPrice() {
-			return (this.AMZNdata.targetPrice = (
-				this.dataFromAMZN.week52High * this.short
-			).toFixed(2));
-		},
-		checkAMZN() {
-			if (this.AMZNdata.targetPrice < this.dataFromAMZN.low) {
-				this.AMZNdata.buyAlert = true;
-				console.log('Buy it!');
-				console.log(this.dataFromAMZN.low);
-			}
-		},
-
-		MSFTTargetPrice() {
-			return (this.MSFTdata.targetPrice = (
-				this.dataFromMSFT.week52High * this.short
-			).toFixed(2));
-		},
-		checkMSFT() {
-			if (this.MSFTdata.targetPrice < this.dataFromMSFT.low) {
-				this.MSFTdata.buyAlert = true;
-				console.log(this.dataFromMSFT.low);
-			}
-		},
-
-		GOOGTargetPrice() {
-			return (this.GOOGdata.targetPrice = (
-				this.dataFromGOOG.week52High * this.short
-			).toFixed(2));
-		},
-		checkGOOG() {
-			if (this.GOOGdata.targetPrice < this.dataFromGOOG.low) {
-				this.GOOGdata.buyAlert = true;
-				console.log(this.dataFromGOOG.low);
-			}
-		},
-
-		FBTargetPrice() {
-			return (this.FBdata.targetPrice = (
-				this.dataFromFB.week52High * this.medium
-			).toFixed(2));
-		},
-		checkFB() {
-			if (this.FBdata.targetPrice < this.dataFromFB.low) {
-				this.FBdata.buyAlert = true;
-				console.log(this.dataFromFB.low);
-			}
-		},
-
-		TWTRTargetPrice() {
-			return (this.TWTRdata.targetPrice = (
-				this.dataFromTWTR.week52High * this.medium
-			).toFixed(2));
-		},
-		checkTWTR() {
-			if (this.TWTRdata.targetPrice < this.dataFromTWTR.low) {
-				this.TWTRdata.buyAlert = true;
-				console.log(this.dataFromTWTR.low);
-			}
-		},
-		TSLATargetPrice() {
-			return (this.TSLAdata.targetPrice = (
-				this.dataFromTSLA.week52High * this.long
-			).toFixed(2));
-		},
-		checkTSLA() {
-			if (this.TSLAdata.targetPrice < this.dataFromTSLA.low) {
-				this.TSLAdata.buyAlert = true;
-				console.log(this.dataFromTSLA.low);
-			}
-		},
-		UBERTargetPrice() {
-			return (this.UBERdata.targetPrice = (
-				this.dataFromUBER.week52High * this.medium
-			).toFixed(2));
-		},
-		checkUBER() {
-			if (this.UBERdata.targetPrice < this.dataFromUBER.low) {
-				this.UBERdata.buyAlert = true;
-				console.log(this.dataFromUBER.low);
-			}
-		},
-		ASMLTargetPrice() {
-			return (this.ASMLdata.targetPrice = (
-				this.dataFromASML.week52High * this.short
-			).toFixed(2));
-		},
-		checkASML() {
-			if (this.ASMLdata.targetPrice < this.dataFromASML.low) {
-				this.ASMLdata.buyAlert = true;
-				console.log(this.dataFromASML.low);
-			}
-		},
-	},
-
 	created() {
 		let AAPL =
 			'https://cloud.iexapis.com/stable/stock/AAPL/quote?token=pk_bc3b7c3b94d74055a098edc0230d4fc6';
@@ -285,39 +163,81 @@ export default {
 			'https://cloud.iexapis.com/stable/stock/ASML/quote?token=pk_bc3b7c3b94d74055a098edc0230d4fc6';
 		fetch(AAPL, {
 			method: 'GET',
-		})
-			.then((response) => {
-				response.json().then((response) => {
-					this.dataFromAAPL = response;
-					console.log('responsed');
-				});
-			})
-			.catch((err) => {
-				console.log(err);
-				console.log('error');
+		}).then((response) => {
+			response.json().then((response) => {
+				this.dataFromAAPL = response;
+				console.log(response.symbol);
+				// Calculate the target price
+				this.AAPLdata.targetPrice = (
+					this.dataFromAAPL.week52High * this.short
+				).toFixed(2);
+				// Buy Alert Condition
+				if (this.AAPLdata.targetPrice > this.dataFromAAPL.latestPrice) {
+					this.AAPLdata.buyAlert = true;
+				} else {
+					this.AAPLdata.buyAlert = false;
+				}
 			});
+		});
+		// .catch((err) => {
+		// 	console.log(err);
+		// 	console.log('error!');
+		// });
+
 		fetch(AMZN, {
 			method: 'GET',
 		}).then((response) => {
 			response.json().then((response) => {
 				this.dataFromAMZN = response;
 				console.log(response.symbol);
+				// Calculate the target price
+				this.AMZNdata.targetPrice = (
+					this.dataFromAMZN.week52High * this.short
+				).toFixed(2);
+				// Buy Alert Condition
+				if (this.AMZNdata.targetPrice > this.dataFromAMZN.latestPrice) {
+					this.AMZNdata.buyAlert = true;
+				} else {
+					this.AMZNdata.buyAlert = false;
+				}
 			});
 		});
+
 		fetch(MSFT, {
 			method: 'GET',
 		}).then((response) => {
 			response.json().then((response) => {
 				this.dataFromMSFT = response;
 				console.log(response.symbol);
+				// Calculate the target price
+				this.MSFTdata.targetPrice = (
+					this.dataFromMSFT.week52High * this.short
+				).toFixed(2);
+				// Buy Alert Condition
+				if (this.MSFTdata.targetPrice > this.dataFromMSFT.latestPrice) {
+					this.MSFTdata.buyAlert = true;
+				} else {
+					this.MSFTdata.buyAlert = false;
+				}
 			});
 		});
+
 		fetch(GOOG, {
 			method: 'GET',
 		}).then((response) => {
 			response.json().then((response) => {
 				this.dataFromGOOG = response;
 				console.log(response.symbol);
+				// Calculate the target price
+				this.GOOGdata.targetPrice = (
+					this.dataFromGOOG.week52High * this.short
+				).toFixed(2);
+				// Buy Alert Condition
+				if (this.GOOGdata.targetPrice > this.dataFromGOOG.latestPrice) {
+					this.GOOGdata.buyAlert = true;
+				} else {
+					this.GOOGdata.buyAlert = false;
+				}
 			});
 		});
 
@@ -327,21 +247,53 @@ export default {
 			response.json().then((response) => {
 				this.dataFromFB = response;
 				console.log(response.symbol);
+				// Calculate the target price
+				this.FBdata.targetPrice = (
+					this.dataFromFB.week52High * this.short
+				).toFixed(2);
+				// Buy Alert Condition
+				if (this.FBdata.targetPrice > this.dataFromFB.latestPrice) {
+					this.FBdata.buyAlert = true;
+				} else {
+					this.FBdata.buyAlert = false;
+				}
 			});
 		});
+
 		fetch(TWTR, {
 			method: 'GET',
 		}).then((response) => {
 			response.json().then((response) => {
 				this.dataFromTWTR = response;
 				console.log(response.symbol);
+				// Calculate the target price
+				this.TWTRdata.targetPrice = (
+					this.dataFromTWTR.week52High * this.short
+				).toFixed(2);
+				// Buy Alert Condition
+				if (this.TWTRdata.targetPrice > this.dataFromTWTR.latestPrice) {
+					this.TWTRdata.buyAlert = true;
+				} else {
+					this.TWTRdata.buyAlert = false;
+				}
 			});
 		});
+
 		fetch(TSLA, {
 			method: 'GET',
 		}).then((response) => {
 			response.json().then((response) => {
 				this.dataFromTSLA = response;
+				// Calculate the target price
+				this.TSLAdata.targetPrice = (
+					this.dataFromTSLA.week52High * this.short
+				).toFixed(2);
+				// Buy Alert Condition
+				if (this.TSLAdata.targetPrice > this.dataFromTSLA.latestPrice) {
+					this.TSLAdata.buyAlert = true;
+				} else {
+					this.TSLAdata.buyAlert = false;
+				}
 			});
 		});
 
@@ -351,6 +303,16 @@ export default {
 			response.json().then((response) => {
 				this.dataFromUBER = response;
 				console.log(response.symbol);
+				// Calculate the target price
+				this.UBERdata.targetPrice = (
+					this.dataFromUBER.week52High * this.short
+				).toFixed(2);
+				// Buy Alert Condition
+				if (this.UBERdata.targetPrice > this.dataFromUBER.latestPrice) {
+					this.UBERdata.buyAlert = true;
+				} else {
+					this.UBERdata.buyAlert = false;
+				}
 			});
 		});
 
@@ -360,6 +322,16 @@ export default {
 			response.json().then((response) => {
 				this.dataFromASML = response;
 				console.log(response.symbol);
+				// Calculate the target price
+				this.ASMLdata.targetPrice = (
+					this.dataFromASML.week52High * this.short
+				).toFixed(2);
+				// Buy Alert Condition
+				if (this.ASMLdata.targetPrice > this.dataFromASML.latestPrice) {
+					this.ASMLdata.buyAlert = true;
+				} else {
+					this.ASMLdata.buyAlert = false;
+				}
 			});
 		});
 	},
